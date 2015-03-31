@@ -18,8 +18,9 @@ class action_plugin_mredirect extends DokuWiki_Action_Plugin {
       if ($ACT != 'show') return;
       if (!($INFO['exists'])) return;          # don't try to read an article that doesn't exist
       
-      $all = rtrim(rawWiki($ID)); $inner = substr ($all, 2, -2);
-      if (($all == '[[' . $inner . ']]') and (strpos ($inner, '[[') === false) and (strpos ($inner, ']]') === false)) {
+      $all = rtrim(rawWiki($ID));
+      if(preg_match('/^(?:==+[^=]+==+\s+)?\[\[(.+)\]\]$/',$all,$p)) {
+          $inner = $p[1];
           if (!strpos ($inner, '://') === false) {
               $url = $inner;    # link is URL already
           } else {
